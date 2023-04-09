@@ -1,0 +1,146 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "eastus"
+        },
+        "VNetName": {
+            "value": "vnet-c5-hub-eu"
+        },
+        "NSGs": {
+            "value": [
+                {
+                    "properties": {
+                        "NSGName": "NSG-RDGSubnet",
+                        "SubnetName": "RDGSubnet",
+                        "securityRules": [
+                            {
+                                "name": "Inbound_Deny_All",
+                                "properties": {
+                                    "description": "Deny all inbound traffic",
+                                    "protocol": "*",
+                                    "sourcePortRange": "*",
+                                    "sourceAddressPrefix": "*",
+                                    "destinationPortRange": "*",
+                                    "destinationAddressPrefix": "*",
+                                    "access": "Deny",
+                                    "priority": 4096,
+                                    "direction": "Inbound"
+                                }
+                            },
+                            {
+                                "name": "Outbound_Deny_All",
+                                "properties": {
+                                    "description": "Deny all inbound traffic",
+                                    "protocol": "*",
+                                    "sourcePortRange": "*",
+                                    "sourceAddressPrefix": "*",
+                                    "destinationPortRange": "*",
+                                    "destinationAddressPrefix": "*",
+                                    "access": "Deny",
+                                    "priority": 4096,
+                                    "direction": "Outbound"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "properties": {
+                        "NSGName": "NSG-ADSubnet",
+                        "SubnetName": "ADSubnet",
+                        "securityRules": [
+                            {
+                                "name": "Inbound_Deny_All",
+                                "properties": {
+                                    "description": "Deny all inbound traffic",
+                                    "protocol": "*",
+                                    "sourcePortRange": "*",
+                                    "sourceAddressPrefix": "*",
+                                    "destinationPortRange": "*",
+                                    "destinationAddressPrefix": "*",
+                                    "access": "Deny",
+                                    "priority": 4096,
+                                    "direction": "Inbound"
+                                }
+                            },
+                            {
+                                "name": "Outbound_Deny_All",
+                                "properties": {
+                                    "description": "Deny all inbound traffic",
+                                    "protocol": "*",
+                                    "sourcePortRange": "*",
+                                    "sourceAddressPrefix": "*",
+                                    "destinationPortRange": "*",
+                                    "destinationAddressPrefix": "*",
+                                    "access": "Deny",
+                                    "priority": 4096,
+                                    "direction": "Outbound"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "properties": {
+                        "NSGName": "NSG-APPGWSubnet",
+                        "SubnetName": "APPGWSubnet",
+                        "securityRules": [
+                            {
+                                "name": "Inbound_Allow_Http",
+                                "properties": {
+                                    "description": "Allow inbound http traffic",
+                                    "protocol": "TCP",
+                                    "sourcePortRange": "*",
+                                    "sourceAddressPrefix": "*",
+                                    "destinationPortRange": "80",
+                                    "destinationAddressPrefix": "*",
+                                    "access": "Allow",
+                                    "priority": 4096,
+                                    "direction": "Inbound"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "properties": {
+                        "NSGName": "NSG-FTPSubnet",
+                        "SubnetName": "FTPSubnet",
+                        "SecurityRules": [
+                            {
+                                "name": "Inbound_Deny_All",
+                                "properties": {
+                                    "description": "Deny all inbound traffic",
+                                    "protocol": "*",
+                                    "sourcePortRange": "*",
+                                    "sourceAddressPrefix": "*",
+                                    "destinationPortRange": "*",
+                                    "destinationAddressPrefix": "*",
+                                    "access": "Deny",
+                                    "priority": 4096,
+                                    "direction": "Inbound"
+                                }
+                            },
+                            {
+                                "name": "Outbound_Deny_All",
+                                "properties": {
+                                    "description": "Deny all inbound traffic",
+                                    "protocol": "*",
+                                    "sourcePortRange": "*",
+                                    "sourceAddressPrefix": "*",
+                                    "destinationPortRange": "*",
+                                    "destinationAddressPrefix": "*",
+                                    "access": "Deny",
+                                    "priority": 4096,
+                                    "direction": "Outbound"
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,67 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string"
+        },
+        "VNetName": {
+            "type": "string",
+            "metadata": {
+                "description": "description"
+            }
+        },
+        "NSGs": {
+            "type": "array"
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(parameters('NSGs')[copyIndex()].properties.NSGName)]",
+            "location": "[parameters('Location')]",
+            "copy": {
+                "name": "NSGs",
+                "count": "[length(parameters('NSGs'))]"
+            },
+            "properties": {
+                "securityRules": "[parameters('NSGs')[copyIndex()].properties.SecurityRules]"
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "name": "[concat('apply',parameters('NSGs')[copyIndex()].properties.NSGName)]",
+            "dependsOn": [
+                "NSGs"
+            ],
+            "copy": {
+                "name": "association",
+                "count": "[length(parameters('NSGs'))]",
+                "mode": "Serial"
+            },
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "resources": [
+                        {
+                            "apiVersion": "2020-05-01",
+                            "type": "Microsoft.Network/virtualNetworks/subnets",
+                            "name": "[concat(parameters('VNetName'), '/', parameters('NSGs')[copyIndex()].properties.SubnetName)]",
+                            "location": "[resourceGroup().location]",
+                            "properties": {
+                                "addressPrefix": "[reference(resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks/subnets', parameters('VNetName'), parameters('NSGs')[copyIndex()].properties.SubnetName), '2018-03-01').addressPrefix]",
+                                "networkSecurityGroup": {
+                                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('NSGs')[copyIndex()].properties.NSGName)]"
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}
